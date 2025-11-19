@@ -20,7 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug:show gradlew file info (before chmod)
+      - name: Debug: show gradlew file info (before chmod)
         run: |
           pwd
           ls -la
