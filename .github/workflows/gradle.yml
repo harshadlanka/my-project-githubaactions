@@ -61,9 +61,10 @@ jobs:
         if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         run: chmod +x ./gradlew
 
-      - name: "Debug: show gradlew file info after chmod (Linux/macOS")
+      - name: "Debug: show gradlew file info after chmod"
         if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         run: ls -la gradlew || true
+
 
       - name: Build with Gradle Wrapper
         run: |
