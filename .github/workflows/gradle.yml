@@ -20,7 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug:show gradlew file info (before chmod)
+      - name: Debug: show gradlew file info (before chmod)
         run: |
           pwd
           ls -la
@@ -37,15 +37,21 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Make gradlew executable (ensure runner can run it)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         run: chmod +x ./gradlew
 
       - name: Debug: show gradlew file info (after chmod)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         run: ls -la gradlew || true
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build --no-daemon
+        run: |
+          if [ "${{ runner.os }}" == 'Windows' ]; then
+            echo "Running on Windows — use gradlew.bat"
+            .\gradlew.bat build --no-daemon
+          else
+            ./gradlew build --no-daemon
+          fi
 
   dependency-submission:
     runs-on: ubuntu-latest
