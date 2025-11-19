@@ -66,15 +66,18 @@ jobs:
         run: ls -la gradlew || true
 
 
-      - name: Build with Gradle Wrapper
+      - name: Build with Gradle Wrapper (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
         run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            echo "Running on Windows..."
-            powershell -Command ".\\gradlew.bat build --no-daemon"
-          else
-            echo "Running on Linux/macOS..."
-            ./gradlew build --no-daemon
-          fi
+          Write-Host "Running on Windows runner"
+          .\gradlew.bat build --no-daemon
+
+      - name: Build with Gradle Wrapper (Linux/macOS)
+        if: ${{ runner.os != 'Windows' }}
+        run: |
+          echo "Running on Linux/macOS runner"
+          ./gradlew build --no-daemon
 
   dependency-submission:
     runs-on: ubuntu-latest
