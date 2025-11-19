@@ -36,16 +36,23 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Make gradlew executable (ensure runner can run it)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+      - name: Make gradlew executable (Linux/macOS only)
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         run: chmod +x ./gradlew
 
       - name: Debug: show gradlew file info (after chmod)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         run: ls -la gradlew || true
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build --no-daemon
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            echo "Running on Windows..."
+            powershell -Command ".\\gradlew.bat build --no-daemon"
+          else
+            echo "Running on Linux/macOS..."
+            ./gradlew build --no-daemon
+          fi
 
   dependency-submission:
     runs-on: ubuntu-latest
