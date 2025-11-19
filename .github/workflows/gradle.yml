@@ -16,9 +16,9 @@ on:
 jobs:
   build:
     runs-on: ${{matrix.os}}
-    startegy:
+    strategy:
       matrix:
-        os : [ubuntu-latest, windows-latest, macOS-latest]
+        os : [ubuntu-latest, windows-latest, macos-latest]
     permissions:
       contents: read
 
@@ -26,7 +26,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug:show gradlew file info (before chmod)
+      - name: Debug: show gradlew file info (before chmod)
         run: |
           echo "PWD: $(pwd)"
           echo "Listing repo root:"
